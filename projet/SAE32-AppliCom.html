@@ -1,0 +1,94 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMC - Accueil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-image: url('https://media.istockphoto.com/id/1249219777/fr/photo/achat-concept-en-ligne-cartons-de-colis-ou-de-papier-avec-un-logo-de-panier-dans-un-chariot.jpg?s=612x612&w=0&k=20&c=gEeGilxqkSN571PP8m5CV1SiN0Q9bCbt8AkUvf56UHY='); /* Remplacez le chemin par le chemin de votre image */
+            background-size: cover; /* Assure que l'image de fond couvre l'ensemble de la page */
+            background-position: center; /* Centre l'image de fond */
+            background-repeat: no-repeat; /* Empêche la répétition de l'image de fond */
+
+        }
+
+        header, footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #login-button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #3498db; /* Bleu */
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #login-button:hover {
+            background-color: #2980b9; /* Change la couleur au survol */
+        }
+
+        section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+
+        .choice-container {
+            display: flex;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>BMC</h1>
+    <button id="login-button" onclick="redirectTo('login')">Login</button>
+</header>
+
+<section>
+    <!-- Contenu principal, ici vous pouvez ajouter du contenu additionnel -->
+</section>
+
+<footer>
+    <p>© 2023 BMC - Adresse de l'entreprise - Numéro de téléphone - Email</p>
+</footer>
+
+<script>
+    function redirectTo(page) {
+        // Rediriger en fonction de la page sélectionnée
+        // Vous pouvez ajouter les URL appropriées pour chaque page
+        switch (page) {
+            case 'login':
+                window.location.href = 'Login.html';
+                break;
+            default:
+                console.error('Page non reconnue');
+        }
+    }
+</script>
+
+</body>
+</html>
+            
