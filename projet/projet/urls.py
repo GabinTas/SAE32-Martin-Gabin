@@ -16,9 +16,11 @@ Including another URLconf
 from unicodedata import name
 from django.contrib import admin
 from django.urls import path
-from clients.views import home
+from clients.views import home, login, inscription
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home, name="home")
+    path('home', home, name="home"),
+    path('login', login, name="login"),
+    path('inscription', inscription, name="inscription")
 ]
