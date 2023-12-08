@@ -9,3 +9,6 @@ def login(request, *args, **kwargs) :
 
 def inscription(request, *args, **kwargs) :
     return render(request, 'inscription.html')
+
+def transporteur(request, *args, **kwargs) :
+    return render(request, 'transporteur.html')
