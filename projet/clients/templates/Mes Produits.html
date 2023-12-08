@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - BMC</title>
+    <title>Mes Articles</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -83,22 +83,27 @@
 <body>
 
 <header>
-    <h1>BMC     </h1>
+    <h1>BMC</h1>
+    <button id="Produit" onclick="redirectTo('Produit')">Ajout Produit</button>
 </header>
-
-<section>
-    <h2>Connexion - BMC</h2>
-    <form action="SAE32-AppliCom.html" method="post">
-        <input type="email" name="email" placeholder="Adresse e-mail" required><br>
-        <input type="password" name="password" placeholder="Mot de passe" required><br>
-        <button type="submit">Se connecter</button>
-    </form>
-    <a href="inscription.html">Pas encore inscrit ? Créez un compte ici</a>
-</section>
 
 <footer>
     <p>© 2023 BMC - Adresse de l'entreprise - Numéro de téléphone - Email</p>
 </footer>
+
+<script>
+    function redirectTo(page) {
+        // Rediriger en fonction de la page sélectionnée
+        // Vous pouvez ajouter les URL appropriées pour chaque page
+        switch (page) {
+            case 'Produit':
+                window.location.href = 'AjoutProduit.HTML';
+                break;
+            default:
+                console.error('Page non reconnue');
+        }
+    }
+</script>
 
 </body>
 </html>

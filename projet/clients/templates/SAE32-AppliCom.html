@@ -33,11 +33,6 @@
             align-items: center;
         }
 
-        a {
-            text-decoration: none; /* Supprime le soulignage */
-            color: inherit; /* Assure que la couleur du texte reste la même */
-        }
-
         #login-button {
             padding: 10px;
             font-size: 16px;
@@ -68,7 +63,7 @@
 <body>
 
 <header>
-    <h1><a href="home">BMC<a></h1>
+    <h1>BMC</h1>
     <button id="login-button" onclick="redirectTo('login')">Login</button>
 </header>
 
@@ -86,7 +81,7 @@
         // Vous pouvez ajouter les URL appropriées pour chaque page
         switch (page) {
             case 'login':
-                window.location.href = 'login';
+                window.location.href = 'Login.html';
                 break;
             default:
                 console.error('Page non reconnue');
