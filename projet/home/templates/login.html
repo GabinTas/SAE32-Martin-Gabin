@@ -1,4 +1,5 @@
 {% load static %}
+{% load group_tags %}
 
 <!DOCTYPE html>
 <html>
@@ -8,7 +9,7 @@
 <link href="{% static 'css/style.css' %}" media="screen" rel="stylesheet" type="text/css"/>
 <style>@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Erica+One&family=Syncopate&family=Kanit:wght@800&family=Montserrat:wght@300&family=Ramabhadra&family=Work+Sans:wght@300&display=swap');</style>
 <script crossorigin="anonymous" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<title>Amazob</title>
+<title>Amazing</title>
 <link rel="shortcut icon" href="{% static 'imgs/infini.png' %}" type="image/x-icon">
 </head>
 <body>
@@ -305,7 +306,16 @@
 	<h1 class="menubar" id="mb3">|</h1>
 	</div>
 	<div id="mtopbar">
-	<a class="Tall" href="{% url 'home:home' %}">Produits</a>
+		{% if user|has_group:"Admin" %}
+			<a class="Tall" href="{% url 'home:gestion' %}">Gestion</a>
+		{% endif %}
+		{% if user|has_group:"Client" %}
+			<a class="Tall" href="{% url 'home:ajout' %}">Ajout</a>
+			<a class="Tall" href="{% url 'home:suivi' %}">Suivi</a>
+		{% endif %}
+		{% if user|has_group:"Transporteur" %}
+		<a class="Tall" href="{% url 'home:transporteur' %}">Transporteur</a>
+		{% endif %}
 	</div>
 	<div id="dlogin">
 		{% if request.user.is_authenticated %}
@@ -314,10 +324,6 @@
 		{% else %}
 			<a class="Tlogin" id="Tlogin1" href="{% url 'home:login' %}">S'inscrire</a><a class="Tlogin" id="Tlogin2" href="{% url 'home:login' %}">Se connecter</a>
 		{% endif %}
-		<a href="{% url 'home:panier' %}">
-			<img id="logo-panier" src="{% static 'imgs/panier.png' %}">
-			<div id="nbr-panier">0</div>
-		</a>
 	</div></b>
 </div>
 <div id="div1">
@@ -392,6 +398,9 @@
     </script>
 	{% endif %}
 </div>
+<footer>
+<p>&copy; 2023 AMAZING. Tous droits réservés.</p>
+</footer>
 </div>
 </body>
 </html>

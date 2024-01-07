@@ -132,7 +132,7 @@ a{
 	height: 100vh;
 	transition-duration: 1s;
 	transition-delay: 0.5s;
-	opacity: 0;
+	opacity: 1;
 	z-index: 999;
 }
 #dot1{
@@ -889,6 +889,9 @@ a{
 	height: 200px;
 	transition-duration: 0.2s;
 }
+.dj-produit-map{
+	display: flex;
+}
 .dj-suivi-exp-dest{
 	background-color: #ffffff;
 	box-shadow: 0px 0px 2px rgb(0, 0, 0);
@@ -932,6 +935,13 @@ a{
 	font-family: Montserrat;
 	color: rgb(0, 0, 0);
 }
+.dj-produits-infos{
+	margin-left: 15px;
+	text-align: left;
+	font-size: 15px;
+	font-family: Montserrat;
+	color: rgb(0, 0, 0);
+}
 .dj-name{
 	font-size: 30px;
 	font-family: Montserrat;
@@ -944,6 +954,61 @@ a{
 	font-size: 20px;
 	font-family: Montserrat;
 	color: rgb(0, 0, 0);
+}
+.dj-titre-2{
+	margin-top: 10px;
+	margin-left: 15px;
+	text-align: left;
+	font-size: 22px;
+	font-family: Montserrat;
+	color: rgb(0, 0, 0);
+}
+.dj-titre-3{
+	display: flex;
+	align-items: center;
+	height: calc(100vh - 60px);
+	margin-top: 0px;
+	margin-left: 15px;
+	text-align: left;
+	font-size: 30px;
+	font-family: Montserrat;
+	color: rgb(0, 0, 0);
+}
+.dj-titre-4{
+	height: 30px;
+	display: flex;
+	align-items: center;
+	padding: 0 10px;
+	margin: 0px;
+	font-size: 15px;
+	font-family: Montserrat;
+	background-color: #36c742;
+	color: rgb(255, 255, 255);
+	border-radius: 10px;
+}
+.dj-titre-5{
+	width: 350px;
+	padding: 10px 0;
+	font-size: 30px;
+	font-family: Montserrat;
+	color: rgb(0, 0, 0);
+	background-color: #2a2f70;
+	color: rgb(255, 255, 255);
+	border-radius: 10px;
+}
+.dj-camion{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border-radius: 0px;
+	margin-top: 30px;
+	width: calc(100vw - 100px);
+	background-color: #ffffff;
+}
+.dj-contenu{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
 }
 .dj-mail{
 	padding: 10px;

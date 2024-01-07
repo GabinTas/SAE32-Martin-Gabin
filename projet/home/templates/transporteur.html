@@ -1,30 +1,16 @@
-<?php
-session_start();
-if ($_SESSION['droits'] == 'restreint') {
-    header('Location: HTTP/1.0 403 Forbidden');
-    echo "Accès refusé. Vous n'êtes pas autorisé à accéder à ce fichier.";
-}
-require('connexion-db.php');
-
-
-?>
-
-
-
-
-
-
+{% load static %}
+{% load group_tags %}
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<link href="style.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 <style>@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Cinzel&family=Erica+One&family=Syncopate&family=Kanit:wght@800&family=Montserrat:wght@300&Oswald:wght@500&family=Ramabhadra&family=Work+Sans:wght@300&display=swap');</style>
 <script crossorigin="anonymous" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<title>Smart Flush</title>
-<link rel="shortcut icon" href="imgs/wc.ico" type="image/x-icon">
+<title>Amazing</title>
+<link rel="shortcut icon" href="{% static 'imgs/infini.png' %}" type="image/x-icon">
 </head>
 <body>
 <script>
@@ -353,142 +339,125 @@ require('connexion-db.php');
 						}
 					});
 				});
-			</script>
+</script>
 
 <div id="load"><div id="dot1"></div><div id="dot2"></div></div>
 <div id="topbar"><b>
-	<img href="panier.php" id="logo" src="imgs/wc.png">
-	<a id="Tlogo" href="index.php">SMARTFLUSH</a>
+	<img href="{% url 'home:home' %}" id="logo" src="{% static 'imgs/infini.png' %}">
+	<a id="Tlogo" href="{% url 'home:home' %}">AMAZING</a>
 	<div id="menu">
 	<h1 class="menubar" id="mb1">|</h1>
 	<h1 class="menubar" id="mb2">|</h1>
 	<h1 class="menubar" id="mb3">|</h1>
 	</div>
 	<div id="mtopbar">
-	<a href="index.php" id="logo"></a>
-	<a class="Tall" href="index.php">Nos produits</a>
-	<a class="Tall" href="nous.php">Qui sommes-nous ?</a>
-	<a class="Tall" href="contact.php">Nous contacter</a>
+        {% if user|has_group:"Admin" %}
+            <a class="Tall" href="{% url 'home:gestion' %}">Gestion</a>
+        {% endif %}
+        {% if user|has_group:"Client" %}
+            <a class="Tall" href="{% url 'home:ajout' %}">Ajout</a>
+            <a class="Tall" href="{% url 'home:suivi' %}">Suivi</a>
+        {% endif %}
+        {% if user|has_group:"Transporteur" %}
+        <a class="Tall" href="{% url 'home:transporteur' %}">Transporteur</a>
+        {% endif %}
 	</div>
 	<div id="dlogin">
-		<?php echo $deconnexion;?>
-		<a href="panier.php">
-			<img id="logo-panier" src="imgs/panier.png">
-			<div id="nbr-panier">0</div>
-		</a>
+		{% if request.user.is_authenticated %}
+			<a id="profil"><img src="{% static 'imgs/homme.png' %}" width="30px"></a>
+			<div id="dj-connecté">Utilisateur : {{ user.username }}</div>
+			<a class="Tlogin" id="Tlogin1" href="{% url 'home:login' %}">Se déconnecter</a>
+		{% else %}
+			<a class="Tlogin" id="Tlogin1" href="{% url 'home:login' %}">S'inscrire</a><a class="Tlogin" id="Tlogin2" href="{% url 'home:login' %}">Se connecter</a>
+		{% endif %}
 	</div></b>
 </div>
 <div id="div1">
-	<div id="dstockuser">
-		<div class="stockuser" id="stock">
-            <h1 class="Tloginall" id="Tlaprofil">Stocks</h1>
-			<div id="dstock">
-				<div class="stock-produit">
-					<img src="imgs/SmartFlushXR.png" width="150px">
-					<div class="compteur"><div id="m1" class="moins">-</div><h1 id="element1" class="cmpt">0</h1><div id="p1" class="plus">+</div></div>
-				</div>
-				<div class="stock-produit">
-					<img src="imgs/SmartFlushX.png" width="210px">
-					<div class="compteur"><div id="m2" class="moins">-</div><h1 id="element2" class="cmpt">0</h1><div id="p2" class="plus">+</div></div>
-				</div>
-				<div class="stock-produit">
-					<img src="imgs/SmartFlushXPROMAX.png" width="225px">
-					<div class="compteur"><div id="m3" class="moins">-</div><h1 id="element3" class="cmpt">0</h1><div id="p3" class="plus">+</div></div>
-				</div>
-			</div>
-		</div>
-		<div class="stockuser" id="user">
-            <h1 class="Tloginall" id="Tlaprofil">Utilisateurs</h1>
-			<div id="duser">
-				<?php require('utilisateurs.php')?>
-			</div>
-		</div>
+<div id="div2">
+	<div id="caroussel">
+        <div class="dj-camion">
+        <h1 class="dj-titre-5">Contenu du camion</h1>
+        <div class="dj-contenu">
+        {% for produits in product_object %}
+            {% for transporteur in produits.transporteur.all %}
+                {% if transporteur.account == request.user %}
+                    {% if produits.départ_dépôt == None %}
+                    {% else %}
+                        {% if produits.reçu_le == None %}
+                        <div class="dj-produits">
+                            <img src=" {{ MEDIA_URL }} ../{{ produits.image }}" class="dj-img">
+                            <h1 class="dj-name">{{ produits.name }}</h1>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        </div>
+        
+        <form method="POST" action="" style="height: 75px;">
+            {% csrf_token %}
+            
+            {% for produits in product_object %}
+                {% for transporteur in produits.transporteur.all %}
+                    {% if transporteur.account == request.user %}
+                        {% if produits.départ_dépôt == None %}
+                        {% else %}
+                            <input name="maj_produits{{ produits.id }}" value="{{ produits.id }}" type="hidden">
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+            <button>Mettre à jour localisation du camion</button>
+        </form>
+
+        </div>
+		{% for produits in product_object %}
+            {% for transporteur in produits.transporteur.all %}
+                {% if transporteur.account == request.user %}
+                    {% if produits.départ_dépôt == None %}
+                        <div class="dj-produits">
+                            <img src=" {{ MEDIA_URL }} ../{{ produits.image }}" class="dj-img">
+                            <h1 class="dj-name">{{ produits.name }}</h1>
+                            <form method="POST" action="" style="height: 20px;">
+                                {% csrf_token %}
+                                <input name="produit_id" value="{{ produits.id }}" type="hidden">
+                                <button style="margin-top: 40px;">Ajouter</button>
+                            </form>
+                        </div>
+                    {% else %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
 	</div>
-	
+</div>
+
 <footer>
-  <p>&copy; 2023 SmartFlush. Tous droits réservés.</p>
+  <p>&copy; 2023 AMAZING. Tous droits réservés.</p>
 </footer>
 </div>
 </body>
 </html>
 
 <script>
-
-
-document.getElementById("element1").innerHTML = ns1;
-document.getElementById("element2").innerHTML = ns2;
-document.getElementById("element3").innerHTML = ns3;
-
-document.getElementById("m1").addEventListener("click", function() {
-    ns1 -= 1;
-    document.getElementById("element1").innerHTML = ns1;
-	$.ajax({
-		type: 'POST',
-		url : 'connexion-db.php',
-		data : {ns1 : ns1, ns2 : ns2, ns3 : ns3}
-	});
-});
-document.getElementById("p1").addEventListener("click", function() {
-    ns1 += 1;
-    document.getElementById("element1").innerHTML = ns1;
-	$.ajax({
-		type: 'POST',
-		url : 'connexion-db.php',
-		data : {ns1 : ns1, ns2 : ns2, ns3 : ns3}
-	});
-});
-
-document.getElementById("m2").addEventListener("click", function() {
-    ns2 -= 1;
-    document.getElementById("element2").innerHTML = ns2;
-	$.ajax({
-		type: 'POST',
-		url : 'connexion-db.php',
-		data : {ns1 : ns1, ns2 : ns2, ns3 : ns3}
-	});
-});
-document.getElementById("p2").addEventListener("click", function() {
-    ns2 += 1;
-    document.getElementById("element2").innerHTML = ns2;
-	$.ajax({
-		type: 'POST',
-		url : 'connexion-db.php',
-		data : {ns1 : ns1, ns2 : ns2, ns3 : ns3}
-	});
-});
-
-document.getElementById("m3").addEventListener("click", function() {
-    ns3 -= 1;
-    document.getElementById("element3").innerHTML = ns3;
-	$.ajax({
-		type: 'POST',
-		url : 'connexion-db.php',
-		data : {ns1 : ns1, ns2 : ns2, ns3 : ns3}
-	});
-});
-document.getElementById("p3").addEventListener("click", function() {
-    ns3 += 1;
-    document.getElementById("element3").innerHTML = ns3;
-	$.ajax({
-		type: 'POST',
-		url : 'connexion-db.php',
-		data : {ns1 : ns1, ns2 : ns2, ns3 : ns3}
-	});
-});
-
-
-
-document.getElementById("nbr-panier").innerHTML = nbrpanier;
-
-
-function deconnexion(){
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'deconnexion.php', true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      console.log(xhr.responseText);
+    function getLocation() {
+        if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+        console.log("ok");
+        } else { 
+        console.log("Geolocation is not supported by this browser.");
+        }
     }
-  };
-  xhr.send();
-}
+    
+    function showPosition(position) {
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+    
+        document.getElementById('latitude').value = lat;
+        document.getElementById('longitude').value = lon;
+    }
+    window.onload = getLocation;
 </script>

@@ -1,14 +1,17 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User, Group
 from .models import clients
 from django.conf import settings
-
+from .decorators import group_required
+import decimal
 import sys
 from pathlib import Path
+from datetime import timedelta
 
 chemin_parent = Path (__file__).resolve().parent.parent
 sys.path.append(str(chemin_parent))
@@ -65,27 +68,51 @@ def login_user(request):
     return render(request, "login.html", {"form":form})
 
 def home(request):
+    return render(request, "index.html")
+
+@group_required(['Transporteur'])
+def transporteur(request):
+    if request.method == 'POST':
+        produit_id = request.POST.get('produit_id')
+        if produit_id:
+            produit = get_object_or_404(produits, pk=produit_id)
+            date=timezone.now()
+            produit.départ_dépôt = date
+            produit.date_livraison = date + timedelta(days=1)
+            produit.save()
+            messages.success(request, "Date de départ du dépôt mise à jour.")
+        maj_produits = request.POST.get('maj_produits')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        for key in request.POST:
+            if key.startswith('maj_produits'):
+                produit_id = request.POST[key]
+                produit = get_object_or_404(produits, pk=produit_id)
+                produit.latitude=latitude
+                produit.longitude=longitude
+                produit.save()
+            messages.success(request, "Date de départ du dépôt mise à jour.")
+        return redirect('home:transporteur')
     product_object = produits.objects.all()
-    return render(request, "index.html", {'product_object':product_object})
+    return render(request, "transporteur.html", {'product_object':product_object})
 
-def profil(request):
-    return render(request, 'profil.html')
-
-def panier(request):
-    return render(request, 'panier.html')
-
+@group_required(['Client'])
 def ajout(request):
     if request.method == 'POST':
         nom = request.POST['nom']
         prix = request.POST['prix']
         image = request.FILES.get('image')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
         email_destinataire = request.POST.get('email_destinataire')
         transporteur = request.POST.get('transporteur')
 
         produit = produits.objects.create(
             name=nom,
             price=prix,
-            image=image
+            image=image,
+            latitude=latitude,
+            longitude=longitude
         )
         expediteur, created = clients.objects.get_or_create(account=request.user)
         produit.expéditeur.add(expediteur)
@@ -112,10 +139,20 @@ def ajout(request):
 
     return render(request, 'ajout.html', context)
 
+@group_required(['Admin'])
 def gestion(request):
     if request.method == 'POST':
+        produit_id = request.POST.get('produit_id')
+        print(produit_id)
+        if produit_id:
+            produit = get_object_or_404(produits, pk=produit_id)
+            produit.arrivée_dépôt = timezone.now()
+            produit.latitude = 43.338817198182504
+            produit.longitude = 3.2101374864578247
+            produit.save()
+            messages.success(request, "Date d'arrivée au dépôt mise à jour.")
+            return redirect('home:gestion')
         client_id = request.POST.get('client_id')
-        # Assurez-vous que client_id est un entier valide avant de l'utiliser pour obtenir un client
         try:
             user = get_object_or_404(clients, pk=client_id)
 
@@ -160,6 +197,16 @@ def gestion(request):
 
     return render(request, 'gestion.html', {'client_object': client_object, 'product_object':product_object, 'all_groups':all_groups})
 
+@group_required(['Client'])
 def suivi(request):
+    if request.method == 'POST':
+        produit_id = request.POST.get('produit_id')
+        if produit_id:
+            produit = get_object_or_404(produits, pk=produit_id)
+            date=timezone.now()
+            produit.reçu_le = date
+            produit.save()
+            messages.success(request, "Colis reçu")
+        return redirect('home:suivi')
     product_object = produits.objects.all()
     return render(request, 'suivi.html', {'product_object':product_object})

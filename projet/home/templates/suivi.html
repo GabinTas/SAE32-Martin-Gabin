@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 <style>@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Cinzel&family=Erica+One&family=Syncopate&family=Kanit:wght@800&family=Montserrat:wght@300&Oswald:wght@500&family=Ramabhadra&family=Work+Sans:wght@300&display=swap');</style>
 <script crossorigin="anonymous" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<title>Smart Flush</title>
+<title>Amazing</title>
 <link rel="shortcut icon" href="{% static 'imgs/infini.png' %}" type="image/x-icon">
 </head>
 <body>
@@ -351,14 +351,16 @@
 	<h1 class="menubar" id="mb3">|</h1>
 	</div>
 	<div id="mtopbar">
-		<a class="Tall" href="{% url 'home:home' %}">Produits</a>
-		<a class="Tall" href="{% url 'home:ajout' %}">Ajout</a>
-	{% if user|has_group:"Admin" %}
-		<a class="Tall" href="{% url 'home:gestion' %}">Gestion</a>
-	{% endif %}
-	{% if user|has_group:"Client" %}
-		<a class="Tall" href="{% url 'home:suivi' %}">Suivi</a>
-	{% endif %}
+		{% if user|has_group:"Admin" %}
+			<a class="Tall" href="{% url 'home:gestion' %}">Gestion</a>
+		{% endif %}
+		{% if user|has_group:"Client" %}
+			<a class="Tall" href="{% url 'home:ajout' %}">Ajout</a>
+			<a class="Tall" href="{% url 'home:suivi' %}">Suivi</a>
+		{% endif %}
+		{% if user|has_group:"Transporteur" %}
+		<a class="Tall" href="{% url 'home:transporteur' %}">Transporteur</a>
+		{% endif %}
 	</div>
 	<div id="dlogin">
 		{% if request.user.is_authenticated %}
@@ -368,38 +370,72 @@
 		{% else %}
 			<a class="Tlogin" id="Tlogin1" href="{% url 'home:login' %}">S'inscrire</a><a class="Tlogin" id="Tlogin2" href="{% url 'home:login' %}">Se connecter</a>
 		{% endif %}
-		<a href="{% url 'home:panier' %}">
-			<img id="logo-panier" src="{% static 'imgs/panier.png' %}">
-			<div id="nbr-panier">0</div>
-		</a>
 	</div></b>
 </div>
 <div id="div1">
 <div id="div2">
 	<div id="caroussel">
+		<div class="dj-suivi-exp-dest">
+		<h1 class="dj-titre-2">Produits expédiés :</h1>
+        {% for produits in product_object %}
+            {% for expéditeur in produits.expéditeur.all %}
+                {% if expéditeur.account == request.user %}
+					<div class="dj-produit-map">
+						<div class="dj-produits-suivi">
+							<img src=" {{ MEDIA_URL }} ../{{ produits.image }}" class="dj-img-gestion">
+							<h1 class="dj-produits-légende">{{ produits.name }}</h1>
+						</div>
+							<div style="margin-top: 20px;">
+								<h1 class="dj-produits-infos">Emballé le : {% if produits.emballé != None %}{{ produits.emballé }}{% endif %}</h1>
+								<h1 class="dj-produits-infos">Arrivée au dépôt le : {% if produits.arrivée_dépôt != None %}{{ produits.arrivée_dépôt }}{% endif %}</h1>
+								<h1 class="dj-produits-infos">Départ du dépôt le : {% if produits.départ_dépôt != None %}{{ produits.départ_dépôt }}{% endif %}</h1>
+								{% for transporteur in produits.transporteur.all %}
+								<h1 class="dj-produits-infos">Transporteur choisi : {{ transporteur.account }}</h1>
+								{% endfor %}
+								<h1 class="dj-produits-infos">Date de livraison : {% if produits.date_livraison != None %}{{ produits.date_livraison }}{% endif %}</h1>
+								<h1 class="dj-produits-infos">Produit reçu le : {% if produits.reçu_le != None %}{{ produits.reçu_le }}{% endif %}</h1>
+							</div>
+						<span id="latitude" style="display:none;">{{ produits.latitude }}</span>
+						<span id="longitude" style="display:none;">{{ produits.longitude }}</span>
+					</div>
+					<iframe style=" margin-left: 10px; width: calc(100% - 20px);" height="500px" style="border: 1px solid black" src="https://www.openstreetmap.org/export/embed.html?bbox=3.157281875610352%2C43.318621193001704%2C3.3006191253662114%2C43.37467191557141&amp;layer=mapnik&amp;marker={{produits.latitude}}%2C{{produits.longitude}}"></iframe>
+				{% endif %}
+            {% endfor %}
+		{% endfor %}
+		</div>
+		<div class="dj-suivi-exp-dest">
+		<h1 class="dj-titre-2">Produits destinés :</h1>
         {% for produits in product_object %}
             {% for destinataire in produits.destinataire.all %}
                 {% if destinataire.account == request.user %}
-                <div class="dj-suivi-exp-dest">
-                    <div class="dj-produits-suivi">
-                        <img src=" {{ MEDIA_URL }} ../{{ produits.image }}" class="dj-img-gestion">
-                        <h1 class="dj-produits-légende">{{ produits.name }}</h1>
-                    </div>
-					<iframe width="425" height="350" src="https://www.openstreetmap.org/export/embed.html?bbox=3.220328952789307%2C43.34442284330862%2C3.223924968719483%2C43.34950716884437&amp;layer=mapnik&amp;marker=43.34696510942661%2C3.2221269607543945" style="border: 1px solid black"></iframe>
-				</div>
+					<div class="dj-produit-map">
+						<div class="dj-produits-suivi">
+							<img src=" {{ MEDIA_URL }} ../{{ produits.image }}" class="dj-img-gestion">
+							<h1 class="dj-produits-légende">{{ produits.name }}</h1>
+						</div>
+							<div style="margin-top: 20px;">
+								<h1 class="dj-produits-infos">Emballé le : {% if produits.emballé != None %}{{ produits.emballé }}{% endif %}</h1>
+								<h1 class="dj-produits-infos">Arrivée au dépôt le : {% if produits.arrivée_dépôt != None %}{{ produits.arrivée_dépôt }}{% endif %}</h1>
+								<h1 class="dj-produits-infos">Départ du dépôt le : {% if produits.départ_dépôt != None %}{{ produits.départ_dépôt }}{% endif %}</h1>
+								{% for transporteur in produits.transporteur.all %}
+								<h1 class="dj-produits-infos">Transporteur choisi : {{ transporteur.account }}</h1>
+								{% endfor %}
+								<h1 class="dj-produits-infos">Date de livraison : {% if produits.date_livraison != None %}{{ produits.date_livraison }}{% endif %}</h1>
+								<h1 class="dj-produits-infos">Produit reçu le : {% if produits.reçu_le != None %}{{ produits.reçu_le }}{% endif %}</h1>
+							</div>
+						<span id="latitude" style="display:none;">{{ produits.latitude }}</span>
+						<span id="longitude" style="display:none;">{{ produits.longitude }}</span>
+					</div>
+					<iframe style=" margin-left: 10px; width: calc(100% - 20px);" height="500px" style="border: 1px solid black" src="https://www.openstreetmap.org/export/embed.html?bbox=3.157281875610352%2C43.318621193001704%2C3.3006191253662114%2C43.37467191557141&amp;layer=mapnik&amp;marker={{produits.latitude}}%2C{{produits.longitude}}"></iframe>
+					<form method="POST" action="" style="height: 75px;">
+						{% csrf_token %}
+						<input name="produit_id" value="{{ produits.id }}" type="hidden">
+						<button>Produit reçu</button>
+					</form>
 				{% endif %}
             {% endfor %}
-            {% for expéditeur in produits.expéditeur.all %}
-                {% if expéditeur.account == request.user %}
-                <div class="dj-suivi-exp-dest">
-                    <div class="dj-produits-suivi">
-                        <img src=" {{ MEDIA_URL }} ../{{ produits.image }}" class="dj-img-gestion">
-                        <h1 class="dj-produits-légende">{{ produits.name }}</h1>
-                    </div>
-                </div>
-                {% endif %}
-            {% endfor %}
         {% endfor %}
+		</div>
 	</div>
 </div>
 
@@ -412,11 +448,4 @@
 
 
 <script>
-nbrpanier=0
-document.getElementById("nbr-panier").innerHTML = nbrpanier;
-document.getElementById("dj-add").addEventListener("click", function() {
-    nbrpanier += 1;
-    document.getElementById("nbr-panier").innerHTML = nbrpanier;
-});
-
 </script>
