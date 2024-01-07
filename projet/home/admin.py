@@ -7,12 +7,10 @@ from django.contrib.auth.models import User
 
 
 class clientsInline(admin.StackedInline):
-    
     model = clients
     can_delete=False
 
 class clientsAdmin(UserAdmin):
-
     inlines = (clientsInline, )
 
 admin.site.unregister(User)

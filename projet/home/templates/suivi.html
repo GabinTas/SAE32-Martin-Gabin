@@ -377,16 +377,29 @@
 <div id="div1">
 <div id="div2">
 	<div id="caroussel">
-		{% for produits in product_object %}
-			{% if produits.destinataire.exists %}
-				<div class="dj-produits">
-					<img src=" {{ MEDIA_URL }} {{ produits.image }}" class="dj-img">
-					<h1 class="dj-name">{{ produits.name }}</h1>
-					<h1 class="dj-price">{{ produits.price }} €</h1>
-					<img id="dj-add" src="{% static 'imgs/plus.png' %}" width="50px">
+        {% for produits in product_object %}
+            {% for destinataire in produits.destinataire.all %}
+                {% if destinataire.account == request.user %}
+                <div class="dj-suivi-exp-dest">
+                    <div class="dj-produits-suivi">
+                        <img src=" {{ MEDIA_URL }} ../{{ produits.image }}" class="dj-img-gestion">
+                        <h1 class="dj-produits-légende">{{ produits.name }}</h1>
+                    </div>
+					<iframe width="425" height="350" src="https://www.openstreetmap.org/export/embed.html?bbox=3.220328952789307%2C43.34442284330862%2C3.223924968719483%2C43.34950716884437&amp;layer=mapnik&amp;marker=43.34696510942661%2C3.2221269607543945" style="border: 1px solid black"></iframe>
 				</div>
-			{% endif %}
-		{% endfor %}
+				{% endif %}
+            {% endfor %}
+            {% for expéditeur in produits.expéditeur.all %}
+                {% if expéditeur.account == request.user %}
+                <div class="dj-suivi-exp-dest">
+                    <div class="dj-produits-suivi">
+                        <img src=" {{ MEDIA_URL }} ../{{ produits.image }}" class="dj-img-gestion">
+                        <h1 class="dj-produits-légende">{{ produits.name }}</h1>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
 	</div>
 </div>
 
@@ -397,6 +410,7 @@
 </body>
 </html>
 
+
 <script>
 nbrpanier=0
 document.getElementById("nbr-panier").innerHTML = nbrpanier;
@@ -404,7 +418,5 @@ document.getElementById("dj-add").addEventListener("click", function() {
     nbrpanier += 1;
     document.getElementById("nbr-panier").innerHTML = nbrpanier;
 });
-
-
 
 </script>

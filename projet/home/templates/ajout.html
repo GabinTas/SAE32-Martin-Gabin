@@ -377,6 +377,13 @@
                 <input name="nom" type="text" placeholder="Nom" />
                 <input name="prix" type="number" placeholder="prix" />
                 <input name="image" type="file" placeholder="Image" />
+				<input name="email_destinataire" type="email" placeholder="Email du destinataire" />
+				<select name="transporteur">
+					<option value="">Choisir un transporteur</option>
+					{% for transporteur in transporteurs %}
+						<option value="{{ transporteur.id }}">{{ transporteur.username }}</option>
+					{% endfor %}
+				</select>
                 <button id="b1">Ajouter</button>
             </form>
         </div>

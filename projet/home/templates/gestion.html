@@ -356,9 +356,6 @@
 	{% if user|has_group:"Admin" %}
 		<a class="Tall" href="{% url 'home:gestion' %}">Gestion</a>
 	{% endif %}
-	{% if user|has_group:"Client" %}
-		<a class="Tall" href="{% url 'home:suivi' %}">Suivi</a>
-	{% endif %}
 	</div>
 	<div id="dlogin">
 		{% if request.user.is_authenticated %}
@@ -377,16 +374,69 @@
 <div id="div1">
 <div id="div2">
 	<div id="caroussel">
-		{% for produits in product_object %}
-			{% if produits.destinataire.exists %}
-				<div class="dj-produits">
-					<img src=" {{ MEDIA_URL }} {{ produits.image }}" class="dj-img">
-					<h1 class="dj-name">{{ produits.name }}</h1>
-					<h1 class="dj-price">{{ produits.price }} €</h1>
-					<img id="dj-add" src="{% static 'imgs/plus.png' %}" width="50px">
-				</div>
-			{% endif %}
-		{% endfor %}
+        <form method="get" action="">
+            <input type="text" name="search" placeholder="Rechercher un client...">
+            <button type="submit">Rechercher</button>
+        </form>
+        <div id="dj-clients">
+            {% for client in client_object %}
+            <div class="dj-clients">
+                <h1 class="dj-mail">{{ client.email }}</h1>
+                {% for group in client.account.groups.all %}
+                    <h1 class="dj-group">{{ group.name }}</h1>
+                {% endfor %}
+                <h1 class="dj-titre-1">Produits expédiés par l'utilisateur :</h1>
+                <div class="dj-produits-expe-dest">
+                {% for produits in product_object %}
+                    {% for expéditeur in produits.expéditeur.all %}
+                        {% if expéditeur.account == client.account %}
+                            <div class="dj-produits-gestion">
+                                <img src=" {{ MEDIA_URL }} ../{{ produits.image }}" class="dj-img-gestion">
+                                <h1 class="dj-produits-légende">{{ produits.name }}</h1>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </div>
+                <h1 class="dj-titre-1">Produits destinés à l'utilisateur :</h1>
+                <div class="dj-produits-expe-dest">
+                {% for produits in product_object %}
+                    {% for destinataire in produits.destinataire.all %}
+                        {% if destinataire.account == client.account %}
+                            <div class="dj-produits-gestion">
+                                <img src=" {{ MEDIA_URL }} ../{{ produits.image }}" class="dj-img-gestion">
+                                <h1 class="dj-produits-légende">{{ produits.name }}</h1>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </div>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="client_id" value="{{ client.id }}">
+                        <input name="email" type="email" placeholder="Changer l'email" />
+                        <select name="group">
+                            <option value="">Choisir un groupe</option>
+                            {% for group in all_groups %}
+                                <option value="{{ group.id }}">{{ group.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="dj-modif">Modifier l'utilisateur</button>
+                    </form>
+                    
+                </div>
+            
+            {% endfor %}
+        </div>
+        {% for produits in product_object %}
+            {% if produits.destinataire == None %}
+            <div class="dj-produits">
+                <img src=" {{ MEDIA_URL }} ../{{ produits.image }}" class="dj-img">
+                <h1 class="dj-name">{{ produits.name }}</h1>
+                <h1 class="dj-price">{{ produits.price }} €</h1>
+            </div>
+            {% endif %}
+        {% endfor %}
 	</div>
 </div>
 
@@ -396,15 +446,3 @@
 </div>
 </body>
 </html>
-
-<script>
-nbrpanier=0
-document.getElementById("nbr-panier").innerHTML = nbrpanier;
-document.getElementById("dj-add").addEventListener("click", function() {
-    nbrpanier += 1;
-    document.getElementById("nbr-panier").innerHTML = nbrpanier;
-});
-
-
-
-</script>

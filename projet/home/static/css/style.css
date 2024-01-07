@@ -838,6 +838,20 @@ a{
 	justify-content: center;
 	flex-wrap: wrap;
 }
+#dj-clients{
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+.dj-clients{
+	display: flex;
+	flex-direction: column;
+	background-color: #ffffff;
+	border-radius: 0px;
+	margin: 15px;
+	width: calc(100vw - 100px);
+	padding-bottom: 15px;
+}
 .dj-produits{
 	display: flex;
 	flex-direction: column;
@@ -851,16 +865,105 @@ a{
 	height: 400px;
 	transition-duration: 0.2s;
 }
+.dj-produits-gestion{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: #ffffff;
+	box-shadow: 0px 0px 2px rgb(0, 0, 0);
+	margin: 15px;
+	width: 200px;
+	height: 200px;
+	transition-duration: 0.2s;
+}
+.dj-produits-suivi{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: #ffffff;
+	box-shadow: 0px 0px 2px rgb(0, 0, 0);
+	margin: 15px;
+	width: 200px;
+	height: 200px;
+	transition-duration: 0.2s;
+}
+.dj-suivi-exp-dest{
+	background-color: #ffffff;
+	box-shadow: 0px 0px 2px rgb(0, 0, 0);
+	margin-top: 25px;
+	padding: 20px;
+	width: calc(100% - 100px);
+	transition-duration: 0.2s;
+}
 .dj-produits:hover{
 	box-shadow: -5px -5px 0px rgb(46, 102, 223);
+}
+.dj-produits-expe-dest{
+	margin-left: 25px;
+	display: flex;
+	width: calc(100% - 50px);
+}
+.dj-modif{
+	cursor: pointer;
+	padding: 10px;
+	width: fit-content;
+	background-color: rgb(46, 46, 46);
+	margin-top: 0px;
+	margin-left: 25px;
+	text-align: left;
+	font-size: 20px;
+	font-family: Montserrat;
+	color: rgb(255, 255, 255);
 }
 .dj-img{
 	transition-duration: 0.2s;
 	height: 175px;
 	object-fit: cover;
 }
+.dj-img-gestion{
+	transition-duration: 0.2s;
+	height: 75px;
+	object-fit: cover;
+}
+.dj-produits-légende{
+	font-size: 25px;
+	font-family: Montserrat;
+	color: rgb(0, 0, 0);
+}
 .dj-name{
 	font-size: 30px;
+	font-family: Montserrat;
+	color: rgb(0, 0, 0);
+}
+.dj-titre-1{
+	margin-top: 0;
+	margin-left: 25px;
+	text-align: left;
+	font-size: 20px;
+	font-family: Montserrat;
+	color: rgb(0, 0, 0);
+}
+.dj-mail{
+	padding: 10px;
+	width: fit-content;
+	background-color: rgb(80, 212, 230);
+	margin-top: 25px;
+	margin-left: 25px;
+	text-align: left;
+	font-size: 20px;
+	font-family: Montserrat;
+	color: rgb(0, 0, 0);
+}
+.dj-group{
+	padding: 10px;
+	width: fit-content;
+	background-color: rgb(230, 80, 80);
+	margin-top: 0px;
+	margin-left: 25px;
+	text-align: left;
+	font-size: 15px;
 	font-family: Montserrat;
 	color: rgb(0, 0, 0);
 }
